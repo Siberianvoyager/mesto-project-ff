@@ -15,6 +15,7 @@ export function handleEscClose(evt) {
     }
 }
 */
+/*
 // Функция для открытия модального окна
 function openModal(modalElement) {
     modalElement.classList.add('popup_opened');
@@ -54,3 +55,4 @@ document.addEventListener('click', (event) => {
         closeModal(imagePopup);
     }
 });
+*/

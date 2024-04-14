@@ -29,6 +29,8 @@ export function deleteCardForm(card) {
     card.remove(); // Удаляем карточку из DOM
 }
 */
+
+/*
 import { openPopup, closePopup } from './index.js';
 
 const popupFigure = document.querySelector('.popup_type_image');
@@ -97,3 +99,4 @@ class Card {
 }
 
 export {Card}
+*/
