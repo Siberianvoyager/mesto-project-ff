@@ -12,7 +12,7 @@ export function createCard(data, openImagePopup) {
     const cardImage = cardElement.querySelector('.card__image');
     const cardTitle = cardElement.querySelector('.card__title');
     const cardLikeButton = cardElement.querySelector('.card__like-button');
-    const deleteButton = document.createElement('button');
+    const deleteButton = cardElement.querySelector('.card__delete-button'); 
     deleteButton.classList.add('card__delete-button');
     cardImage.src = data.link;
     cardImage.alt = data.name;
@@ -20,7 +20,7 @@ export function createCard(data, openImagePopup) {
   
     cardImage.addEventListener('click', () => openImagePopup(data.link, data.name));
     cardLikeButton.addEventListener('click', () => likeCard(cardLikeButton));
-    deleteButton.addEventListener('click', () => deleteCard(cardElement.closest('.places__item')));
+    deleteButton.addEventListener('click', () => deleteCard(deleteButton.closest('.places__item')));
    
     return cardElement;
   }
