@@ -35,7 +35,7 @@
   height: 24px;
   cursor: pointer;
   display: none;
-  background-image: url(	http://localhost:8080/8667ac4a523e8fc42e59.svg);
+  background: transparent url('../../../images/edit-icon.svg') center no-repeat;
   background-size: cover; 
   background-repeat: no-repeat;
 }

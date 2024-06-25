@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "homepage": "https://Siberianvoyager.github.io/mesto-project-ff",
-
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve",
