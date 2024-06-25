@@ -16,3 +16,6 @@ export function openPopup(popup) {
         }
     }
  }
+
+ window.openPopup = openPopup;
+window.closePopup = closePopup;

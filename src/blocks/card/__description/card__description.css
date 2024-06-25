@@ -1,7 +1,15 @@
-.card__description {
+.card__title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #fff;
   padding: 25px 20px;
+}
+
+.card__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #fff;
 }

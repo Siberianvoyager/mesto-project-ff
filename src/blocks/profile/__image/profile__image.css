@@ -1,4 +1,4 @@
-.profile__image {
+.profile__avatar {
   width: 120px;
   height: 120px;
   -webkit-border-radius: 50%;
@@ -10,13 +10,52 @@
 }
 
 @media screen and (max-width: 740px) {
-  .profile__image {
+  .profile__avatar {
     margin: 0 10px 0 0;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .profile__image {
+  .profile__avatar {
     margin-right: 0;
   }
+}
+
+.profile__avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile__avatar-edit-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: none;
+  background-image: url(	http://localhost:8080/8667ac4a523e8fc42e59.svg);
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+
+.profile__avatar-container:hover .profile__avatar-edit-icon {
+  display: block;
+ 
+}
+
+.profile__avatar:hover {
+  opacity: 0.6;
+}
+
+.popup_type_update-avatar .popup__container {
+  width: 300px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.popup_type_update-avatar .popup__input {
+  margin-bottom: 20px;
 }
