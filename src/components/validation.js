@@ -1,9 +1,6 @@
 export function enableValidation(settings) {
     const forms = Array.from(document.querySelectorAll(settings.formSelector));
     forms.forEach(form => {
-        form.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-        });
         setEventListeners(form, settings);
     });
 }
@@ -13,11 +10,16 @@ function setEventListeners(form, settings) {
     const button = form.querySelector(settings.submitButtonSelector);
     inputs.forEach(input => {
         input.addEventListener('input', () => {
-            validateInput(input, settings);
+            validateInput(input, settings); 
+            validateAllInputs(inputs, settings); 
             toggleButtonState(inputs, button, settings);
         });
     });
     toggleButtonState(inputs, button, settings);
+}
+
+function validateAllInputs(inputs, settings) {
+    inputs.forEach(input => validateInput(input, settings));
 }
 
 function validateInput(input, settings) {
@@ -26,11 +28,14 @@ function validateInput(input, settings) {
 
     if (validity.valueMissing) {
         showInputError(input, errorElement, "Вы пропустили это поле", settings);
-    } else if (input.type === 'text' && (validity.tooShort || validity.tooLong)) {
-        showInputError(input, errorElement, `Минимальное количество символов: ${input.minLength}. Длина текста сейчас: ${input.value.length} символ${input.value.length === 1 ? "" : "ов"}.`, settings);
-    } else if (input.type === 'text' && !/^[A-Za-zА-Яа-яЁё\s\-]+$/.test(input.value)) {
+    } 
+    else if (input.type === 'text' && !/^[A-Za-zА-Яа-яЁё\s\-]+$/.test(input.value)) {
         showInputError(input, errorElement, "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы", settings);
-    } else if (input.type === 'url' && validity.typeMismatch) {
+    } 
+    else if (input.type === 'text' && (validity.tooShort || validity.tooLong)) {
+        showInputError(input, errorElement, `Минимальное количество символов: ${input.minLength}. Длина текста сейчас: ${input.value.length} символ${input.value.length === 1 ? "" : "ов"}.`, settings);
+    } 
+    else if (input.type === 'url' && validity.typeMismatch) {
         showInputError(input, errorElement, "Введите адрес сайта", settings);
     } else {
         hideInputError(input, errorElement, settings);
@@ -64,7 +69,5 @@ export function clearValidation(form, settings) {
         hideInputError(input, errorElement, settings);
     });
     const button = form.querySelector(settings.submitButtonSelector);
-    button.disabled = true;
-    button.classList.add(settings.inactiveButtonClass);
+    toggleButtonState(inputs, button, settings);
 }
-

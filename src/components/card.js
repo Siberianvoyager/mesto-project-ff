@@ -22,16 +22,7 @@ export function createCard(cardData, userId, openImagePopup) {
         cardDeleteButton.style.display = 'none';
     } else {
         cardDeleteButton.addEventListener('click', () => {
-            window.openPopup(confirmDeletePopup);
-        });
-
-        const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
-        const confirmDeleteForm = confirmDeletePopup.querySelector('.popup__form');
-
-        confirmDeleteForm.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-            handleDeleteCard(cardData._id, cardElement);
-            window.closePopup(confirmDeletePopup);
+            openConfirmDeletePopup(cardData._id, cardElement);
         });
     }
 
@@ -42,6 +33,23 @@ export function createCard(cardData, userId, openImagePopup) {
     return cardElement;
 }
 
+function openConfirmDeletePopup(cardId, cardElement) {
+    const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
+    const confirmDeleteForm = confirmDeletePopup.querySelector('.popup__form');
+
+    confirmDeleteForm.removeEventListener('submit', handleDeleteFormSubmit);
+
+    function handleDeleteFormSubmit(evt) {
+        evt.preventDefault();
+        handleDeleteCard(cardId, cardElement);
+        window.closePopup(confirmDeletePopup);
+    }
+
+    confirmDeleteForm.addEventListener('submit', handleDeleteFormSubmit);
+
+    window.openPopup(confirmDeletePopup);
+}
+
 function handleDeleteCard(cardId, cardElement) {
     deleteCard(cardId)
         .then(() => {
@@ -49,17 +57,19 @@ function handleDeleteCard(cardId, cardElement) {
         })
         .catch(err => console.log(err));
 }
+
 function handleLikeButtonClick(cardId, likeButton, likeCount) {
-    const isLiked = likeButton.classList.contains('card__like-button_is-active');
+    const isLiked = likeButton.classList.contains('card__like-button_active');
     const likeAction = isLiked ? unlikeCard : likeCard;
 
     likeAction(cardId)
         .then(cardData => {
-            likeButton.classList.toggle('card__like-button_is-active');
+            likeButton.classList.toggle('card__like-button_active');
             likeCount.textContent = cardData.likes.length;
         })
         .catch(err => console.log(err));
 }
+
 
 
 
