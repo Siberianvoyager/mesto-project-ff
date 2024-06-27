@@ -37,23 +37,42 @@ function openConfirmDeletePopup(cardId, cardElement) {
     const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
     const confirmDeleteForm = confirmDeletePopup.querySelector('.popup__form');
 
-    confirmDeleteForm.removeEventListener('submit', handleDeleteFormSubmit);
-
-    function handleDeleteFormSubmit(evt) {
-        evt.preventDefault();
-        handleDeleteCard(cardId, cardElement);
-        window.closePopup(confirmDeletePopup);
+    function onSubmit(evt) {
+        handleDeleteFormSubmit(evt, cardId, cardElement);
+        confirmDeleteForm.removeEventListener('submit', onSubmit);
     }
 
-    confirmDeleteForm.addEventListener('submit', handleDeleteFormSubmit);
+    confirmDeleteForm.addEventListener('submit', onSubmit);
 
-    window.openPopup(confirmDeletePopup);
+    openPopup(confirmDeletePopup);
+
+    function onClose() {
+        closePopup(confirmDeletePopup);
+        confirmDeleteForm.removeEventListener('submit', onSubmit);
+        confirmDeletePopup.removeEventListener('click', onClose);
+        confirmDeletePopup.querySelector('.popup__close').removeEventListener('click', onClose);
+    }
+
+    confirmDeletePopup.addEventListener('click', (event) => {
+        if (event.target === confirmDeletePopup) {
+            onClose();
+        }
+    });
+
+    confirmDeletePopup.querySelector('.popup__close').addEventListener('click', onClose);
+}
+
+function handleDeleteFormSubmit(evt, cardId, cardElement) {
+    evt.preventDefault();
+    handleDeleteCard(cardId, cardElement);
 }
 
 function handleDeleteCard(cardId, cardElement) {
     deleteCard(cardId)
         .then(() => {
             cardElement.remove();
+            const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
+            closePopup(confirmDeletePopup);
         })
         .catch(err => console.log(err));
 }
@@ -69,11 +88,3 @@ function handleLikeButtonClick(cardId, likeButton, likeCount) {
         })
         .catch(err => console.log(err));
 }
-
-
-
-
-
-
-
-

@@ -151,17 +151,18 @@ document.addEventListener('DOMContentLoaded', function () {
     enableValidation(validationConfig);
 
     Promise.all([getUserInfo(), getInitialCards()])
-        .then(([userData, cards]) => {
+        .then(([userData, cardsArray]) => {
             userId = userData._id;
             profileName.textContent = userData.name;
             profileDescription.textContent = userData.about;
             profileAvatar.style.backgroundImage = `url(${userData.avatar})`;
-            renderCards(cards);
+            renderCards(cardsArray);
         })
         .catch(err => {
             console.log(err);
         });
 });
+
 
 
 
