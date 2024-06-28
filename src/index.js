@@ -2,7 +2,7 @@ import './pages/index.css';
 import { createCard } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateAvatar } from './components/api.js';
+import { getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateAvatar, deleteCard as deleteCardApi } from './components/api.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const placesList = document.querySelector('.places__list');
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const addPlacePopup = document.querySelector('.popup_type_new-card');
     const imagePopup = document.querySelector('.popup_type_image');
     const updateAvatarPopup = document.querySelector('.popup_type_update-avatar');
+    const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
+    const confirmDeleteForm = confirmDeletePopup.querySelector('.popup__form');
     const image = imagePopup.querySelector('.popup__image');
     const caption = imagePopup.querySelector('.popup__caption');
     const nameInput = editProfilePopup.querySelector('.popup__input_type_name');
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderCards(cardsArray) {
         placesList.innerHTML = '';
         cardsArray.forEach(cardData => {
-            const cardElement = createCard(cardData, userId, openImagePopup);
+            const cardElement = createCard(cardData, userId, openImagePopup, openConfirmDeletePopup);
             placesList.appendChild(cardElement);
         });
     }
@@ -40,6 +42,25 @@ document.addEventListener('DOMContentLoaded', function () {
         image.alt = captionText;
         caption.textContent = captionText;
         openPopup(imagePopup);
+    }
+
+    function openConfirmDeletePopup(cardId, cardElement) {
+        openPopup(confirmDeletePopup);
+        confirmDeleteForm.onsubmit = (evt) => handleDeleteFormSubmit(evt, cardId, cardElement);
+    }
+
+    function handleDeleteFormSubmit(evt, cardId, cardElement) {
+        evt.preventDefault();
+        handleDeleteCard(cardId, cardElement);
+    }
+
+    function handleDeleteCard(cardId, cardElement) {
+        deleteCardApi(cardId)
+            .then(() => {
+                cardElement.remove();
+                closePopup(confirmDeletePopup);
+            })
+            .catch(err => console.log(err));
     }
 
     document.querySelectorAll('.popup').forEach(popup => {
@@ -105,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         submitButton.textContent = 'Сохранение...';
         addNewCard(cardNameInput.value, cardImageUrlInput.value)
             .then(cardData => {
-                const newCardElement = createCard(cardData, userId, openImagePopup);
+                const newCardElement = createCard(cardData, userId, openImagePopup, openConfirmDeletePopup);
                 placesList.prepend(newCardElement);
                 addCardForm.reset();
                 clearValidation(addCardForm, validationConfig);
@@ -162,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(err);
         });
 });
+
 
 
 

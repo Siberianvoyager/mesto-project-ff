@@ -1,6 +1,6 @@
-import { deleteCard, likeCard, unlikeCard } from './api.js';
+import { likeCard, unlikeCard } from './api.js';
 
-export function createCard(cardData, userId, openImagePopup) {
+export function createCard(cardData, userId, openImagePopup, openConfirmDeletePopup) {
     const cardTemplate = document.querySelector('#card-template').content;
     const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
     const cardImage = cardElement.querySelector('.card__image');
@@ -31,50 +31,6 @@ export function createCard(cardData, userId, openImagePopup) {
     cardImage.addEventListener('click', () => openImagePopup(cardData.link, cardData.name));
 
     return cardElement;
-}
-
-function openConfirmDeletePopup(cardId, cardElement) {
-    const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
-    const confirmDeleteForm = confirmDeletePopup.querySelector('.popup__form');
-
-    function onSubmit(evt) {
-        handleDeleteFormSubmit(evt, cardId, cardElement);
-        confirmDeleteForm.removeEventListener('submit', onSubmit);
-    }
-
-    confirmDeleteForm.addEventListener('submit', onSubmit);
-
-    openPopup(confirmDeletePopup);
-
-    function onClose() {
-        closePopup(confirmDeletePopup);
-        confirmDeleteForm.removeEventListener('submit', onSubmit);
-        confirmDeletePopup.removeEventListener('click', onClose);
-        confirmDeletePopup.querySelector('.popup__close').removeEventListener('click', onClose);
-    }
-
-    confirmDeletePopup.addEventListener('click', (event) => {
-        if (event.target === confirmDeletePopup) {
-            onClose();
-        }
-    });
-
-    confirmDeletePopup.querySelector('.popup__close').addEventListener('click', onClose);
-}
-
-function handleDeleteFormSubmit(evt, cardId, cardElement) {
-    evt.preventDefault();
-    handleDeleteCard(cardId, cardElement);
-}
-
-function handleDeleteCard(cardId, cardElement) {
-    deleteCard(cardId)
-        .then(() => {
-            cardElement.remove();
-            const confirmDeletePopup = document.querySelector('.popup_type_confirm-delete');
-            closePopup(confirmDeletePopup);
-        })
-        .catch(err => console.log(err));
 }
 
 function handleLikeButtonClick(cardId, likeButton, likeCount) {
